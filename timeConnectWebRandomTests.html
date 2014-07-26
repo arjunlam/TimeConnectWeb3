@@ -17,7 +17,7 @@
 <input type="text" id="box11"><br>
 <input type="text" id="box21"><br>
 
-<table
+<table>
 	<tr><td>Time In</td><td>Time Out</td></tr>
 	<tr><td><select id="box1">
 	<option value="abc"></option>
@@ -343,8 +343,10 @@
 	<option value="06/27/2014 - 07/02/2014">06/27/2014 - 07/02/2014</option>
 </select>
 <button onclick="historyFunction()">Test History Function</button>
-<p id="history1"></p>
-<p id="history2"></p>
+<div id="history1"></div>
+<div id="history3"></div>
+<div id="history2"></div>
+
 
 
 	<script>
@@ -360,7 +362,7 @@
 	var militaryA1 = new Array(28);
 	var militaryA2 = new Array(28);
 
-
+	/*
 	function clFunction() {
 		var x = 'box' + 1;
 		document.getElementById("test2").innerHTML = x;
@@ -368,7 +370,7 @@
 		document.getElementById("test").innerHTML = y;
 
 	}
-
+	*/
 
 	function dropFunction() {
 
@@ -426,42 +428,38 @@
 
 	function historyFunction() {
 
-		var currentUser = Parse.User.current();
-		var UN = currentUser.get("username");
+		document.getElementById("history3").innerHTML = "Currently logged in as: " + FN + " " + LN + " " + UN;
 
-		//need to parse the week info
+		//parses the week info
 		var a = document.getElementById("history").value;
 		var b = a.split(" ");
 		var c = b[0].split("/"); //first date
 		var d = b[2].split("/"); //second date
 		document.getElementById("history1").innerHTML = c + ' ' + d;
 
+
+		//extracts hours for given week
+		var stringTest = '';
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
-
-		var historyHrsTotal = '';
 		
 		query.equalTo("username", UN);
+		query.descending("Date");
 		//query.limit(7); //7 days of the week most recent entries
+		stringTest = stringTest + "hello1";
 		query.find({
 			success: function(results) {
-				//in the array take out the instance of the day and return those hours 
-				//do an if statement and in the array that matches then display those hours
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					//parse the date in the object
-					historyHrsTotal = historyHrsTotal + '/' + object.get('Date');
-				}
-
+				stringTest = stringTest + "hello3";
+				stringTest = stringTest + results[0].get('Date');
+				stringTest = stringTest + "hello4";
+				
 			},
 			error: function(error) {
 				alert("Error: User Does not exist");
 			}
 		});
-
-		document.getElementById("history2").innerHTML = historyHrsTotal;
-	
-
+		stringTest = stringTest + "hello6";
+		document.getElementById("history2").innerHTML = stringTest;
 	}
 
 	</script>
