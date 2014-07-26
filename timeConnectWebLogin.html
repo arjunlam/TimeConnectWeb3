@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<h1>TimeConnect</h1>
+	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+
+</head>
+<body>
+	<input type="text" id="user">Username<br>
+	<input type="password" id="pass">Password<br>
+	<button onclick="loginFunction()">Login</button><br>
+	<a href="timeConnectWeSignUp.html">Sign Up</a>
+	<a href="timeConnectWebContact.html">Contact Us</a>
+	<a href="timeConnectWebResetPass.html">Reset Password</a><br>
+	<p id="test"></p>
+
+	<script>
+
+	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
+
+	function loginFunction() {
+		Parse.User.logIn(document.getElementById("user").value, document.getElementById("pass").value, {
+			success: function(user) {
+				if (document.getElementById("user").value === "arjunlam") {
+					window.location="timeConnectWebManagerPage.html";
+
+					//add the Parse.User.become method
+
+				} else {
+			  		window.location="timeConnectWebEmployeePage.html";
+				}
+			},
+			error: function(error) { 
+			  	alert("Error: Wrong Password "); //+ error.code + " " + error.message
+			} 
+		});
+	}
+	</script>
+</body>
+</html>

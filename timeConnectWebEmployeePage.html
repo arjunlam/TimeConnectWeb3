@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<h1>After Login Page</h1>
+	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+</head>
+<body>
+	<p>Congrats you have logged in, bitch</p>
+	<p>This is the Employee page</p>
+
+	<p id="test">Test</p>
+	<button onclick="logOutFunction()">Log Out</button>
+	<button onclick="showWeek()">Show Hours</button>
+	<a href="timeConnectWebUpdatePI.html">Update Info</a>
+	<button onclick="updateTimeFunction()">Update Time Info</button>
+	<button onclick="historyFunction()">History</button>
+
+	<p>Need to implement History Option</p>
+	<p>Update Time info is similar to Update Info page except we use the TimeSheet class</p>
+
+	<script>
+
+	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
+
+	
+	
+	var currentUser = Parse.User.current();
+	var UN = currentUser.get("username");
+	document.getElementById("test").innerHTML = "CURRENTLY LOGGED IN AS: " + UN;
+
+	function showWeek() {
+
+		var totalHrs = 0;
+		var timeSheet = Parse.Object.extend("TimeSheet");
+		var query = new Parse.Query(timeSheet);
+		
+		query.equalTo("username", UN);
+		query.descending("Date");
+		//query.limit(7); //7 days of the week most recent entries
+		query.find({
+			success: function(results) {
+				//do something with the returned Parse.Object values
+				//var object1 = results[0];
+				document.write('<table border="1" cellspacing="1" cellpadding="5">');
+				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + results[0].get('username') + '</td><tr>');
+				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
+					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+				}
+				document.write('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/100.0 + '</td><td></td></tr>');
+				document.write('</table>');
+				document.close();
+				
+			},
+			error: function(error) {
+				alert("Error: User Does NOT exist");
+			}
+		});
+	}
+	
+
+
+	function logOutFunction() {
+		Parse.User.logOut();
+
+		window.location="timeConnectWebLogin.html";
+	}
+
+
+	function updateTimeFunction() {
+
+		//show time table and when ever the user clicks on this button then invoke the save() method. 
+	}
+
+
+
+
+	</script>
+</body>
+</html>

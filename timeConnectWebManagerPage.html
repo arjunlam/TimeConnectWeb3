@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<h1>After Login Page</h1>
+	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<!-- for drop down menu-->
+	<script src="js/vendor/jquery.js"></script> 
+	<script src="js/foundation/foundation.js"></script> 
+	<script src="js/foundation/foundation.dropdown.js"></script>
+</head>
+<body>
+	<p>Congrats you have logged in</p>
+	<p>This is the Manager page</p>
+	<input type="text" id="Esearch">Search Employee (username)<br>
+	<button onclick="searchFunction()">Search</button><br>
+	<button onclick="logoutFunction()">Log Out</button><br>
+	<button>Approve Hours</button>
+	<button onclick="historyFunction()">History</button>
+	
+	<p>For right now once you logout and go back just refresh the page and you will see the you are logged into change.</p>
+	<p>Also need to connect approve button to a payroll program</p>
+	<p>I'll change it in a bit to use the full name of the employee instead of the username</p>
+	<p id="test"></P>
+
+
+	<script>
+
+	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
+
+	var currentUser = Parse.User.current();
+	var UN = currentUser.get("username");
+	document.getElementById("test").innerHTML = "YOU ARE LOGGED INTO: " + UN;
+
+
+	//get total hours, show approximate pay, show history
+
+	
+function searchFunction() {
+
+		var totalHrs = 0;
+		var timeSheet = Parse.Object.extend("TimeSheet");
+		var query = new Parse.Query(timeSheet);
+		
+		query.equalTo("username", document.getElementById("Esearch").value);
+		query.descending("Date");
+		//query.limit(7); //7 days of the week most recent entries
+		query.find({
+			success: function(results) {
+				//do something with the returned Parse.Object values
+				//var object1 = results[0];
+				document.write('<table border="1" cellspacing="1" cellpadding="5">');
+				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + results[0].get('username') + '</td><tr>');
+				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
+					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+				}
+				document.write('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/100.0 + '</td><td></td></tr>');
+				document.write('</table>');
+				document.close();
+				
+			},
+			error: function(error) {
+				alert("Error: User Does NOT exist");
+			}
+		});
+	}
+
+
+
+	function historyFunction() {
+		var timeSheet = Parse.Object.extend("TimeSheet");
+		var query = new Parse.Query(timeSheet);
+		
+		query.equalTo("username", document.getElementById("Esearch").value);
+		query.descending("Date");
+		query.limit(7); //7 days of the week most recent entries
+		query.find({
+			success: function(results) {
+				//do something with the returned Parse.Object values
+				var object1 = results[0];
+				document.write('<table border="1" cellspacing="1" cellpadding="5">');
+				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + object1.get('username') + '</td><tr>');
+				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+				}
+				document.write('</table>');
+				
+			},
+			error: function(error) {
+				alert("Error: User Does NOT exist");
+			}
+		});
+
+	}
+
+
+	function logoutFunction() {
+		Parse.User.logOut();
+
+		window.location="timeConnectWebLogin.html";
+	}
+	
+
+	</script>
+</body>
+</html>
