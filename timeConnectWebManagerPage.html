@@ -34,7 +34,6 @@
 	document.getElementById("test").innerHTML = "YOU ARE LOGGED INTO: " + UN;
 
 
-	//get total hours, show approximate pay, show history
 
 	
 function searchFunction() {
@@ -53,7 +52,7 @@ function searchFunction() {
 				document.write('<table border="1" cellspacing="1" cellpadding="5">');
 				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + results[0].get('username') + '</td><tr>');
 				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
-				for (var i = 0; i < results.length; i++) {
+				for (var i = 0; i < 7; i++) {
 					var object = results[i];
 					totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
 					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
@@ -67,36 +66,6 @@ function searchFunction() {
 				alert("Error: User Does NOT exist");
 			}
 		});
-	}
-
-
-
-	function historyFunction() {
-		var timeSheet = Parse.Object.extend("TimeSheet");
-		var query = new Parse.Query(timeSheet);
-		
-		query.equalTo("username", document.getElementById("Esearch").value);
-		query.descending("Date");
-		query.limit(7); //7 days of the week most recent entries
-		query.find({
-			success: function(results) {
-				//do something with the returned Parse.Object values
-				var object1 = results[0];
-				document.write('<table border="1" cellspacing="1" cellpadding="5">');
-				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + object1.get('username') + '</td><tr>');
-				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
-				}
-				document.write('</table>');
-				
-			},
-			error: function(error) {
-				alert("Error: User Does NOT exist");
-			}
-		});
-
 	}
 
 

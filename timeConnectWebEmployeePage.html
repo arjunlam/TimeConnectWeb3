@@ -5,7 +5,7 @@
 	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
 </head>
 <body>
-	<p>Congrats you have logged in, bitch</p>
+	<p>Congrats you have logged in.</p>
 	<p>This is the Employee page</p>
 
 	<p id="test">Test</p>
@@ -14,51 +14,70 @@
 	<a href="timeConnectWebUpdatePI.html">Update Info</a>
 	<button onclick="updateTimeFunction()">Update Time Info</button>
 	<button onclick="historyFunction()">History</button>
+	<a href="timeConnectWebRandomTests.html">Random Tests</a>
+	<a href="timeConnectWebUpdateT.html">Update Time Info</a>
 
 	<p>Need to implement History Option</p>
 	<p>Update Time info is similar to Update Info page except we use the TimeSheet class</p>
 
+	<div id="testing"></div>
+	<div id="testing2"></div>
+	<div id="testing3"></div>
+
+
+	<table><tr><td>Day</td><td>Date</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td></tr><tr><td>Monday</td><td>07/06/2014</td><td><input type="time" id="box1"></td><td><input type="time" id="box2"></td><td><input type="time" id="box3"></td><td><input type="time" id="box4"></td></tr><tr><td>Tuesday</td><td>07/07/2014</td><td><input type="time" id="box5"></td><td><input type="time" id="box6"></td><td><input type="time" id="box7"></td><td><input type="time" id="box8"></td></tr><tr><td>Wednesday</td><td>07/08/2014</td><td><input type="time" id="box9"></td><td><input type="time" id="box10"></td><td><input type="time" id="box11"></td><td><input type="time" id="box12"</td></tr><tr><td>Thrudsay</td><td>07/09/2014</td><td><input type="time" id="box13"></td><td><input type="time" id="box14"></td><td><input type="time" id="box15"></td><td><input type="time" id="box16"></td></tr><tr><td>Friday</td><td>07/10/2014</td><td><input type="time" id="box17"></td><td><input type="time" id="box18"></td><td><input type="time" id="box19"></td><td><input type="time" id="box20"></td></tr><tr><td>Saturday</td><td>07/11/2014</td><td><input type="time" id="box21"></td><td><input type="time" id="box22"></td><td><input type="time" id="box23"></td><td><input type="time" id="box24"></td></tr><tr><td>Sunday</td><td>07/12/2014</td><td><input type="time" id="box25"></td><td><input type="time" id="box26"></td><td><input type="time" id="box27"></td><td><input type="time" id="box28"></td></tr></table>
+
+	<p id="testing4">Testing array</p>
+
 	<script>
 
-	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
+	var stringTest = '';
+
+		stringTest = stringTest + '<table>';
+
+		Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	
-	
-	var currentUser = Parse.User.current();
-	var UN = currentUser.get("username");
-	document.getElementById("test").innerHTML = "CURRENTLY LOGGED IN AS: " + UN;
-
-	function showWeek() {
-
-		var totalHrs = 0;
-		var timeSheet = Parse.Object.extend("TimeSheet");
-		var query = new Parse.Query(timeSheet);
 		
-		query.equalTo("username", UN);
-		query.descending("Date");
-		//query.limit(7); //7 days of the week most recent entries
-		query.find({
-			success: function(results) {
-				//do something with the returned Parse.Object values
-				//var object1 = results[0];
-				document.write('<table border="1" cellspacing="1" cellpadding="5">');
-				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + results[0].get('username') + '</td><tr>');
-				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
-					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
-				}
-				document.write('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/100.0 + '</td><td></td></tr>');
-				document.write('</table>');
-				document.close();
+		var currentUser = Parse.User.current();
+		var UN = currentUser.get("username");
+		var FN = currentUser.get("firstName");
+		var LN = currentUser.get("lastName");
+		document.getElementById("test").innerHTML = "Currently logged in as: " + FN + " " + LN;
+
+		function showWeek() {
+
+			var totalHrs = 0;
+			var timeSheet = Parse.Object.extend("TimeSheet");
+			var query = new Parse.Query(timeSheet);
+		
+			query.equalTo("username", UN);
+			query.descending("Date");
+			//query.limit(7); //7 days of the week most recent entries
+			query.find({
+				success: function(results) {
+					//do something with the returned Parse.Object values
+					//var object1 = results[0];
+					stringTest = stringTest + ('<table border="1" cellspacing="1" cellpadding="5">');
+					stringTest = stringTest + ('<tr><td>' + 'Employee Name: ' + '</td><td>' + results[0].get('FirstName') + '</td><td>' + results[0].get('LastName') + '</td><tr>');
+					stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+
+					for (var i = 0; i < 7; i++) {
+						var object = results[i];
+						totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
+						stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+					}
+					stringTest = stringTest + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/100.0 + '</td><td></td></tr>');
+					stringTest = stringTest + '</table>';
 				
-			},
-			error: function(error) {
-				alert("Error: User Does NOT exist");
-			}
-		});
-	}
+				},
+				error: function(error) {
+					alert("Error: User Does not exist");
+				}
+			});
+
+			document.getElementById("testing").innerHTML = stringTest;
+		}
 	
 
 
@@ -71,7 +90,21 @@
 
 	function updateTimeFunction() {
 
-		//show time table and when ever the user clicks on this button then invoke the save() method. 
+		var points = new Array(28);
+
+		for (i = 0; i < 28; i++) {
+			var ele = 'box' + (i + 1);
+			points[i] = document.getElementById(ele).value;
+		}
+
+
+		var y = '';
+		for (j = 0; j < points.length; j++) {
+			y = y + " " + points[j];
+		}
+
+		document.getElementById("testing4").innerHTML = y;
+
 	}
 
 

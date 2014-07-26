@@ -9,20 +9,18 @@
 	<p id="test1"></p>
 	<p id="test2"></p>
 	<p id="test3"></p>
-	<p id="test4"></p>
 	<p id="test5"></p>
 	<p id="test6"></p>
 	<p id="test7"></p>
 
 
-	<p>UPDATE YOUR INFO BELOW AND FILL ALL FIELDS PLEASE FOR FUCKS SAKE</p>
-	<input type="text" id="firstN">First Name<br>
-	<input type="text" id="lastN">Last Name<br>
-	<input type="text" id="userN">Username<br>
-	<input type="passowrd" id="pass">Password<br>
-	<input type="text" id="email">Email<br>
-	<input type="text" id="company">Company Name<br>
-	<input type="text" id="phoneN">Phone<br>
+	<p>Update your information below and fill all fields please</p>
+	<input type="text" id="firstN" placeholder="First Name"><br>
+	<input type="text" id="lastN" placeholder="Last Name"><br>
+	<input type="text" id="userN" placeholder="Username"><br>
+	<input type="text" id="email" placeholder="Email"><br>
+	<input type="text" id="company" placeholder="Company Name"><br>
+	<input type="text" id="phoneN" placeholder="Phone"><br>
 	<button onclick="updateFunction()">Update</button>
 
 
@@ -33,7 +31,6 @@
 	var fn = currentUser.get("firstName");
 	var ln = currentUser.get("lastName");
 	var un = currentUser.get("username");
-	var pw = currentUser.get("password");
 	var em = currentUser.get("email");
 	var pn = currentUser.get("company");
 	var cn = currentUser.get("phone");
@@ -42,7 +39,6 @@
 	document.getElementById("test1").innerHTML = "First Name: " + fn;
 	document.getElementById("test2").innerHTML = "Last Name: " + ln;
 	document.getElementById("test3").innerHTML = "Username: " + un;
-	document.getElementById("test4").innerHTML = "Password: " + pw;
 	document.getElementById("test5").innerHTML = "Email: " + em;
 	document.getElementById("test6").innerHTML = "Company Name: " + pn;
 	document.getElementById("test7").innerHTML = "Phone: " + cn;
@@ -51,7 +47,6 @@
 	var FN = document.getElementById("firstN").value;
 	var LN = document.getElementById("lastN").value;
 	var UN = document.getElementById("userN").value;
-	var PW = document.getElementById("pass").value;
 	var EM = document.getElementById("email").value;
 	var PN = document.getElementById("phoneN").value;
 	var CN = document.getElementById("company").value;
@@ -65,7 +60,6 @@
 			firstName: FN + "",
 			lastName: LN + "",
 			username: UN + "",
-			password: PW + "",
 			email: EM + "",
 			company: CN + "",
 			phone: PN + "",
@@ -77,11 +71,34 @@
 			},
 			error: function(user, error) {
 				//the save failed.
-				alert("Info was NOT updated please try again " + error.code + " " + error.message);
+				alert("Info was not updated please try again " + error.code + " " + error.message);
 			}
 		});
 
 	}
+
+
+/*
+	function updateFunction2() {
+
+		var user = Parse.User.current();
+
+		user.save(null, {
+			success: function(user) {
+				user.set('firstName', FN + "");
+				user.set('lastName', LN + "");
+				user.set('username', UN + "");
+				user.set('password', PW + "");
+				user.set('email', EM + "");
+				user.set('company', CN + "");
+				user.set('phone', PN + "");
+				user.save();
+				alert("Info has been updated");
+			}
+		});
+
+	}
+	*/
 
 
 	</script>
