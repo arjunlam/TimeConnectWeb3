@@ -2150,6 +2150,9 @@
 
 	<p id="testing4">Testing array</p>
 	<p id="update1">UpdateTimes</p>
+	<p id="update2">Update Total time</p>
+	<p id="update3"></p>
+	<p id="update4"></p>
 	<div id="history1"></div>
 	<div id="history2"></div>
 
@@ -2216,19 +2219,28 @@
 
 
 	function updateTimeFunction() {
+		//this function gets the values from the dropboxes and calculates the total hours for the week. It then updates the corresponding rows in the parse database using the timeInUpdate columns. This updated information will then be sent to the manager and once the manager approves the updated time info then the timeIn/timeOut columns will be replaced with the values in timeInUpdate/timeOutUpdate columns. 
+
 		//setting default values in arrays
+		var totalValue = 0;
 		for (j = 0; j < points2.length; j++) {
-			points2[j] = 99999;
-			militaryA1[j] = 99999;
+			points2[j] = "abc";
+			militaryA1[j] = 9999;
+		}
+
+		for (z = 0; z < militaryA1.length; z++) {
+			if (points2[z] === "abc" && militaryA1[z] === 9999) {
+				totalValue = totalValue + 1;
+			}
 		}
 
 		//extracting values from dropboxes
 		var b = '';
 		var c = 0;
-		for (i = 0; i < points2.length; i++) {
-			var a = "box" + (i + 1);
+		for (y = 0; y < points2.length; y++) {
+			var a = "box" + (y + 1);
 			b = b + ' ' + document.getElementById(a).value;
-			points2[i] = document.getElementById(a).value;
+			points2[y] = document.getElementById(a).value;
 		}
 
 		//converting to military time
@@ -2237,8 +2249,8 @@
 				//do nothing
 			} else {
 				var m = points2[i];
-				var n = m.split(" "); //b[0] is time b[1] AM/PM
-				var p = p[0].split(":"); //c[0] is hour c[1] is minute
+				var n = m.split(" "); //n[0] is time n[1] AM/PM
+				var p = n[0].split(":"); //p[0] is hour p[1] is minute
 				
 				//12:00 AM is 0000 and 12 PM is 2400
 				if (n[1] === "AM") {
@@ -2246,26 +2258,33 @@
 				} else if (n[1] === "PM") {
 					militaryA1[i] = (100 * Number(p[0])) + Number(p[1]) + 1200;
 				} else {
-					militaryA1[i] = 99999;
+					militaryA1[i] = 9999;
 				}
 			}
 		}
-		/*
+		
 		//calculating total hours for week
-		for (x = 0; x < militaryA1.length; x++) {
+		var g = '';
+		for (x = 0; x < militaryA1.length; x = x + 2) {
 			var d = militaryA1[x];
 			var e = militaryA1[x + 1];
-			
-			if (d === 99999) {
+			g = g + ' / ' + x + ' ' + militaryA1[x];
+			if (d === 9999) {
 				//do nothing
 			} else {
-				c = c + (e - d);
+				c = c + (e - d); //this works but outputs wrong value, also need to figure out how to make it 60 mins instead of 100 mins. 
 			}
-
 		}
-		*/
+		
+		/*
 		document.getElementById("update1").innerHTML = b;
-		document.getElementById("update2").innerHTML = c;
+		document.getElementById("update2").innerHTML = c/60.0;
+		document.getElementById("update3").innerHTML = totalValue;
+		document.getElementById("update4").innerHTML = g;
+		*/
+
+		//update time info in parse
+
 
 	}
 
