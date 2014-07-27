@@ -244,6 +244,7 @@
 	}
 	*/
 	function updateTimeInfoFunction() {
+		//need to do a query to get the objects in the results array. Then iterate through the results array to get the object id and then do another loop where the object (individual rows) will be retrieved using the object id. Then just update the row ('timeIn') or ('timeInUpdate') etc using the update or save method. 
 		var resultsArray;
 
 		var timeSheet = Parse.Object.extend("TimeSheet");
