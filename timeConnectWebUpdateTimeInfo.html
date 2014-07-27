@@ -13,6 +13,7 @@
 	</select>
 
 	<button onclick="historyFunction()">History/Update Time info test</button>
+	<button onclick="updateTimeInfoFunction()">Update Me Time Info</button>
 	<p id="history1">History Test</p>
 	<p id="history2">History Test</p>
 	<p id="history3">History Test</p>
@@ -23,9 +24,22 @@
 		var currentUser = Parse.User.current();
 		var UN = currentUser.get("username");
 		document.getElementById("history1").innerHTML = UN;
+		var timeArray = new Array(28); //stores timeIn/timeOut
+
+		//putting timeArray default values as "abc"
+		for (x = 0; x < timeArray.length; x++) {
+			timeArray[x] = "abc";
+		}
+
+		//this is a place holder for the functions that retrieve drop down menu values
+		for (y = 0; y < timeArray.length; y = y + 2) {
+			timeArray[y] = "6:30 AM";
+			timeArray[y + 1] = "5:00 PM";
+		}
 
 
 		var testing = '';
+		//history function works fine now. 
 		function historyFunction() {
 			var a = document.getElementById("values").value;
 			var b = a.split(" ");
@@ -39,8 +53,7 @@
 				success: function(results) {
 					for (i = 0; i < results.length; i++) {
 						var object = results[i];
-						//testing = testing + " " + object.id + " " + object.get('Date') + "<br>";
-					
+
 						
 						if (b[2] === object.get('Date')) {
 							counter = 1;
@@ -68,6 +81,34 @@
 
 			document.getElementById("history2").innerHTML = testing;
 			testing = '';
+		}
+
+
+
+		var testing22 = '';
+		function updateTimeInfoFunction() {
+			var timeSheet = Parse.Object.extend("TimeSheet");
+			var query = new Parse.Query(timeSheet);
+			query.equalTo("username", UN);
+			query.descending("Date");
+			query.find({
+				success: function(results) {
+					for (z = 0; z < results.length; z++) {
+						var object3 = results[z];
+						query.get(object3.id, {
+							success: function(results3) {
+								//do something
+							},
+							error: function(object, error) {
+								alert("User does not exist");
+							}
+						});
+					}
+				},
+				error: function(error) {
+					alert("User does not exist");
+				}
+			});
 		}
 
 
