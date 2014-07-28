@@ -2276,32 +2276,7 @@
 
 		//I am able to retrive the time values and turn them into military time for storage. Still need to get the updating part to work. It should be done then. 
 		//update time info in parse
-		var timeSheet = Parse.Object.extend("TimeSheet");
-		var query = new Parse.Query(timeSheet);
-		query.equalTo("username", UN);
-		query.descending("Date");
-		query.find({
-			success: function(results) {
-				for (z = 0; z < (points2.length)/2; z++) {
-					var object2 = results[z];
-					//set timeIn2,3 and timeInMilitary1,2,3
-					object2.set('timeIn', points2[z*2]);
-					object2.set('timeOut', points2[z*2 + 1]);
-					object2.set('timeIn2', points2[z*2 + 2]);
-					object2.set('timeOut2', points2[z*2 + 3]);
-					object2.set('timeInMilitary', militaryA1[z*2]);
-					object2.set('timeOutMilitary', militaryA1[z*2 + 1]);
-					object2.set('timeInMilitary2', militaryA1[z*2 + 2]);
-					object2.set('timeOutMilitary2', militaryA1[z*2 + 3]);
-					object2.save();
-						
-				}
-				document.getElementById("history3").innerHTML = "Done";
-			},
-			error: function(error) {
-				alert("User does not exist");
-			}
-		});
+
 
 	}
 
