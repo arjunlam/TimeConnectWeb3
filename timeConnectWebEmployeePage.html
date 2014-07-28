@@ -5,19 +5,15 @@
 	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
 </head>
 <body>
-	<p>Congrats you have logged in.</p>
 
 	<p id="test">Test</p>
 	<button onclick="logOutFunction()">Log Out</button>
 	<button onclick="showWeek()">Show Hours</button>
-	<a href="timeConnectWebUpdatePI.html">Update Info</a>
+	<a href="timeConnectWebUpdatePI.html">Update Personal Info</a>
 	<button onclick="updateTimeFunction()">Update Time Info</button>
 	<a href="timeConnectWebUpdateTimeInfo.html">History</a>
 	<a href="timeConnectWebRandomTests.html">Random Tests</a>
-	<a href="timeConnectWebUpdateT.html">Update Time Info</a>
 
-	<p>Need to implement History Option</p>
-	<p>Update Time info is similar to Update Info page except we use the TimeSheet class</p>
 
 	<div id="testing"></div>
 	<div id="testing2"></div>
@@ -2147,9 +2143,16 @@
 </select></td></tr>
 	</table>
 
-	<p id="testing4">Testing array</p>
-	<p id="update1">UpdateTimes</p>
-	<p id="update2">Update Total time</p>
+	<p>Select Work Week</p>
+	<select id="values123">
+		<option value="07-03-2014 - 07-07-2014">07/03/2014 - 07/07/2014</option>
+		<option value="06-26-2014 - 07-02-2014">06/26/2014 - 07/02/2014</option>
+	</select>
+	<button onclick="historyFunction()">Show History</button>
+
+	<p id="testing4"></p>
+	<p id="update1"></p>
+	<p id="update2"></p>
 	<p id="update3"></p>
 	<p id="update4"></p>
 	<div id="history1"></div>
@@ -2161,9 +2164,9 @@
 	var points2 = new Array(28); //store normal time as a string with AM/PM
 	var militaryA1 = new Array(28); //store time as a whole number
 	var stringTest = '';
-
 	stringTest = stringTest + '<table>';
 
+	//the initialize function connects to our specific profile on the parse website, so our database.
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	
@@ -2209,7 +2212,7 @@
 		}
 	
 
-
+	//simply logs out. need to make it so that if a person clicks the back button it doesn't show this page.
 	function logOutFunction() {
 		Parse.User.logOut();
 
@@ -2225,12 +2228,6 @@
 		for (j = 0; j < points2.length; j++) {
 			points2[j] = "abc";
 			militaryA1[j] = 9999;
-		}
-
-		for (z = 0; z < militaryA1.length; z++) {
-			if (points2[z] === "abc" && militaryA1[z] === 9999) {
-				totalValue = totalValue + 1;
-			}
 		}
 
 		//extracting values from dropboxes
@@ -2283,39 +2280,50 @@
 
 	}
 
-	function historyFunction2() {
-		//copy history function from other html file and see if it works, history function in UpdateTimeInfo html works
-		//don't know what the problem is. I want to retrieve according to the person's name and then I iterate through the results array and if the dates match the array with the dates that the user specifies then only those values will be summed up and the total will be displayed. I don't think I will show the timeIn/timeOut since it will be a lot of code. For some reason the find function is not working. 
-
-		document.getElementById("history1").innerHTML = "Currently logged in as: " + FN + " " + LN + " " + UN;
-
-
-		//extracts hours for given week
-		var stringTest1 = '';
-		var timeSheet1 = Parse.Object.extend("TimeSheet");
-		var query1 = new Parse.Query(timeSheet1);
 		
-		query1.equalTo("username", UN);
-		query1.descending("Date");
-		//query.limit(7); //7 days of the week most recent entries
-		stringTest1 = stringTest1 + "hello1";
-		query1.find({
+	var testing = '';
+		//history function works fine now.
+		//need to make it into a table. 
+	function historyFunction() {
+		var a = document.getElementById("values123").value;
+		var b = a.split(" ");
+		var counter = 0;
+		var timeSheet = Parse.Object.extend("TimeSheet");
+		var query = new Parse.Query(timeSheet);
+		query.equalTo("username", UN);
+		query.descending("Date");
+		query.find({
 			success: function(results) {
-				stringTest1 = stringTest1 + "hello3";
-				stringTest1 = stringTest1 + results[0].get('Date');
-				stringTest1 = stringTest1 + "hello4";
-				
+				for (i = 0; i < results.length; i++) {
+					var object = results[i];
+						
+					if (b[2] === object.get('Date')) {
+						counter = 1;
+						for (j = i; j < results.length; j++) { 
+							var object2 = results[j];
+							if (b[0] !== object2.get('Date')) {
+								testing = testing + object2.get('Date') + " | Time In: " + object2.get('timeIn') + " | Time Out: " + object2.get('timeOut') + "<br>";
+							} else {
+								testing = testing + object2.get('Date') + " | Time In: " + object2.get('timeIn') + " | Time Out: " + object2.get('timeOut') + "<br>";
+									break;
+							}
+						}
+					}
+
+					if (counter === 1) {
+						break;
+					}
+				}
+
 			},
 			error: function(error) {
-				alert("Error: User Does not exist");
+				alert("User does not exist");
 			}
 		});
-		stringTest1 = stringTest1 + "hello6";
-		document.getElementById("history2").innerHTML = stringTest1;
+
+		document.getElementById("history2").innerHTML = testing;
+		testing = '';
 	}
-
-
-
 
 	</script>
 </body>
