@@ -11,7 +11,8 @@
 	<script src="js/foundation/foundation.dropdown.js"></script>
 </head>
 <body>
-	<p>Congrats you have logged in</p>
+	<p id="manager1"></p>
+	<p id="manager2"></p>
 	<input type="text" id="Esearch" placeholder="Employee Username"><br>
 	<input type="text" id="firstName" placeholder="Employee First Name"><input type="text" id="lastName" placeholder="Employee Last Name"><br>
 	<button onclick="searchFunction()">Search</button><br>
@@ -30,48 +31,56 @@
 
 	var stringTest = '';
 	stringTest = stringTest + '<table>';
-	//when manager searches for employee make sure to match the employee's company with the managers company so a manager from a given compnay can only see his employees and no one elses. 
+	//search function now checks to see if employee company matches the managers company. 
 	//figure out how you will add roles to the database (probs manually or maybe a CSV file?)
 	//need to implement manager history function to view employee history given a work week date. Copy code for employee html. 
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	var currentUser = Parse.User.current();
 	var UN = currentUser.get("username");
-	var R = currentUser.get("role");
+	var FN = currentUser.get("firstName");
+	var LN = currentUser.get("lastName");
+	var R = currentUser.get("roles");
 	var C = currentUser.get("company");
-	document.getElementById("test").innerHTML = "YOU ARE LOGGED INTO: " + UN;
+	document.getElementById("test").innerHTML = "You are logged in as: " + UN;
 
 	var EFN = document.getElementById("firstName").value;
 	var ELN = document.getElementById("lastName").value;
+
 	
 	function searchFunction() {
 		//look at compound queries
+		stringTest = '';
 		var totalHrs = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
-		
+
 		query.equalTo("username", document.getElementById("Esearch").value);
 		query.descending("Date");
 		//query.limit(7); //7 days of the week most recent entries
 		query.find({
 			success: function(results) {
 				//do something with the returned Parse.Object values
-					//var object1 = results[0];
-					stringTest = stringTest + ('<table border="1" cellspacing="1" cellpadding="5">');
-					stringTest = stringTest + ('<tr><td>' + 'Employee Name: ' + '</td><td>' + results[0].get('FirstName') + '</td><td>' + results[0].get('LastName') + '</td><tr>');
-					stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+				//var object1 = results[0];
+					if (C === results[0].get("company")) {
+						stringTest = stringTest + ('<table border="1" cellspacing="1" cellpadding="5">');
+						stringTest = stringTest + ('<tr><td>' + 'Employee Name: ' + '</td><td>' + results[0].get('FirstName') + '</td><td>' + results[0].get('LastName') + '</td><tr>');
+						stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
 
-					for (var i = 0; i < 7; i++) {
-						var object = results[i];
-						totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
-						stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+						for (var i = 0; i < 7; i++) {
+							var object = results[i];
+							totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
+							stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+						}
+						stringTest = stringTest + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/60.0 + '</td><td></td></tr>');
+						stringTest = stringTest + '</table>';
+					} else {
+						alert("Error: Employee does not exist");
 					}
-					stringTest = stringTest + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/60.0 + '</td><td></td></tr>');
-					stringTest = stringTest + '</table>';
 				
 				},
 				error: function(error) {
-					alert("Error: User Does not exist");
+					alert("Error: Employee does not exist");
 				}
 			});
 			document.getElementById("test2").innerHTML = stringTest;

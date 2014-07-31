@@ -26,6 +26,7 @@
 
 	var UN = document.getElementById("user").value + "";
 
+	//login checks to see if manager or employee
 	function loginFunction() {
 		Parse.User.logIn(UN, document.getElementById("pass").value, {
 			success: function(user) {
