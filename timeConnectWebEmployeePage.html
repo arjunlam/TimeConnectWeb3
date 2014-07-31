@@ -11,8 +11,10 @@
 	<button onclick="showWeek()">Show Hours</button>
 	<a href="timeConnectWebUpdatePI.html">Update Personal Info</a>
 	<button onclick="updateTimeFunction()">Update Time Info</button>
+	<!--
 	<a href="timeConnectWebUpdateTimeInfo.html">History</a>
 	<a href="timeConnectWebRandomTests.html">Random Tests</a>
+-->
 
 
 	<div id="testing"></div>
@@ -2225,6 +2227,8 @@
 		//this function gets the values from the dropboxes and calculates the total hours for the week. It then updates the corresponding rows in the parse database using the timeInUpdate columns. This updated information will then be sent to the manager and once the manager approves the updated time info then the timeIn/timeOut columns will be replaced with the values in timeInUpdate/timeOutUpdate columns. 
 
 		//setting default values in arrays
+
+		//for this function should I update the dates every week manually????
 		var totalValue = 0;
 		for (j = 0; j < points2.length; j++) {
 			points2[j] = "abc";
@@ -2313,12 +2317,15 @@
 		var a = document.getElementById("values123").value;
 		var b = a.split(" ");
 		var counter = 0;
+		var totalHrs2 = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
 		query.equalTo("username", UN);
 		query.descending("Date");
 		query.find({
 			success: function(results) {
+				testing = testing + ('<table border="1" cellspacing="1" cellpadding="5">');
+				testing = testing + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
 				for (i = 0; i < results.length; i++) {
 					var object = results[i];
 						
@@ -2327,10 +2334,12 @@
 						for (j = i; j < results.length; j++) { 
 							var object2 = results[j];
 							if (b[0] !== object2.get('Date')) {
-								testing = testing + object2.get('Date') + " | Time In: " + object2.get('timeIn') + " | Time Out: " + object2.get('timeOut') + "<br>";
+								totalHrs2 = totalHrs2 + (object2.get('timeOutMilitary') - object2.get('timeInMilitary'));
+								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td></tr>'); 
 							} else {
-								testing = testing + object2.get('Date') + " | Time In: " + object2.get('timeIn') + " | Time Out: " + object2.get('timeOut') + "<br>";
-									break;
+								totalHrs2 = totalHrs2 + (object2.get('timeOutMilitary') - object2.get('timeInMilitary'));
+								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td></tr>'); 
+								break;
 							}
 						}
 					}
@@ -2339,6 +2348,9 @@
 						break;
 					}
 				}
+
+				testing = testing + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs2/60.0 + '</td><td></td></tr>');
+				testing = testing + '</table>';
 
 			},
 			error: function(error) {
