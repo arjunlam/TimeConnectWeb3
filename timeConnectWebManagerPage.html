@@ -16,26 +16,31 @@
 	<button onclick="searchFunction()">Search</button><br>
 	<button onclick="logoutFunction()">Log Out</button><br>
 	<button>Approve Hours</button>
-	<button onclick="historyFunction()">History</button>
+	<button onclick="managerHistoryFunction()">History</button>
 	
 	<p>For right now once you logout and go back just refresh the page and you will see the you are logged into change.</p>
 	<p>Also need to connect approve button to a payroll program</p>
 	<p>I'll change it in a bit to use the full name of the employee instead of the username</p>
 	<p id="test"></P>
+	<p id="test2">Shows employee's history</p>
 
 
 	<script>
 
+	var stringTest = '';
+	stringTest = stringTest + '<table>';
+	//when manager searches for employee make sure to match the employee's company with the managers company so a manager from a given compnay can only see his employees and no one elses. 
+	//figure out how you will add roles to the database (probs manually or maybe a CSV file?)
+	//need to implement manager history function to view employee history given a work week date. Copy code for employee html. 
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	var currentUser = Parse.User.current();
 	var UN = currentUser.get("username");
+	var C = currentUser.get("company");
 	document.getElementById("test").innerHTML = "YOU ARE LOGGED INTO: " + UN;
 
-
-
 	
-function searchFunction() {
+	function searchFunction() {
 
 		var totalHrs = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
@@ -47,24 +52,25 @@ function searchFunction() {
 		query.find({
 			success: function(results) {
 				//do something with the returned Parse.Object values
-				//var object1 = results[0];
-				document.write('<table border="1" cellspacing="1" cellpadding="5">');
-				document.write('<tr><td>' + "Employee Name: " + '</td><td>' + results[0].get('username') + '</td><tr>');
-				document.write('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
-				for (var i = 0; i < 7; i++) {
-					var object = results[i];
-					totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
-					document.write('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
-				}
-				document.write('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/100.0 + '</td><td></td></tr>');
-				document.write('</table>');
-				document.close();
+					//var object1 = results[0];
+					stringTest = stringTest + ('<table border="1" cellspacing="1" cellpadding="5">');
+					stringTest = stringTest + ('<tr><td>' + 'Employee Name: ' + '</td><td>' + results[0].get('FirstName') + '</td><td>' + results[0].get('LastName') + '</td><tr>');
+					stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+
+					for (var i = 0; i < 7; i++) {
+						var object = results[i];
+						totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
+						stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+					}
+					stringTest = stringTest + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/60.0 + '</td><td></td></tr>');
+					stringTest = stringTest + '</table>';
 				
-			},
-			error: function(error) {
-				alert("Error: User Does NOT exist");
-			}
-		});
+				},
+				error: function(error) {
+					alert("Error: User Does not exist");
+				}
+			});
+			document.getElementById("test2").innerHTML = stringTest;
 	}
 
 
@@ -75,6 +81,9 @@ function searchFunction() {
 	}
 	
 
+	function managerHistoryFunction() {
+
+	}
 	</script>
 </body>
 </html>
