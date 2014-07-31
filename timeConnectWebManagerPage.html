@@ -12,7 +12,8 @@
 </head>
 <body>
 	<p>Congrats you have logged in</p>
-	<input type="text" id="Esearch">Search Employee (username)<br>
+	<input type="text" id="Esearch" placeholder="Employee Username"><br>
+	<input type="text" id="firstName" placeholder="Employee First Name"><input type="text" id="lastName" placeholder="Employee Last Name"><br>
 	<button onclick="searchFunction()">Search</button><br>
 	<button onclick="logoutFunction()">Log Out</button><br>
 	<button>Approve Hours</button>
@@ -36,12 +37,15 @@
 
 	var currentUser = Parse.User.current();
 	var UN = currentUser.get("username");
+	var R = currentUser.get("role");
 	var C = currentUser.get("company");
 	document.getElementById("test").innerHTML = "YOU ARE LOGGED INTO: " + UN;
 
+	var EFN = document.getElementById("firstName").value;
+	var ELN = document.getElementById("lastName").value;
 	
 	function searchFunction() {
-
+		//look at compound queries
 		var totalHrs = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
@@ -71,6 +75,7 @@
 				}
 			});
 			document.getElementById("test2").innerHTML = stringTest;
+			stringTest = '';
 	}
 
 

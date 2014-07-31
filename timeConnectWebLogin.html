@@ -24,10 +24,12 @@
 
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
+	var UN = document.getElementById("user").value + "";
+
 	function loginFunction() {
-		Parse.User.logIn(document.getElementById("user").value, document.getElementById("pass").value, {
+		Parse.User.logIn(UN, document.getElementById("pass").value, {
 			success: function(user) {
-				if (document.getElementById("user").value === "arjunlam") {
+				if (user.get("roles") === "manager") {
 					window.location="timeConnectWebManagerPage.html";
 
 					//add the Parse.User.become method
@@ -37,7 +39,7 @@
 				}
 			},
 			error: function(error) { 
-			  	alert("Error: Wrong Username or Password "); //+ error.code + " " + error.message
+			  	alert("Error: Wrong Username or Password. Please refresh page and try again.");
 			} 
 		});
 	}
