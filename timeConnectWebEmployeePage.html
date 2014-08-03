@@ -2177,7 +2177,8 @@
 	var UN = currentUser.get("username");
 	var FN = currentUser.get("firstName");
 	var LN = currentUser.get("lastName");
-	document.getElementById("test").innerHTML = "Currently logged in as: " + FN + " " + LN;
+	var EN = currentUser.get("employeeName");
+	document.getElementById("test").innerHTML = "Currently logged in as: " + EN;
 
 	function showWeek() {
 			//set a counter variable and an if statment so if counter is more than 2 then clicking button wont display more history. 
@@ -2185,7 +2186,7 @@
 			var timeSheet = Parse.Object.extend("TimeSheet");
 			var query = new Parse.Query(timeSheet);
 		
-			query.equalTo("username", UN);
+			query.equalTo("EmployeeName", EN);
 			query.descending("Date");
 			//query.limit(7); //7 days of the week most recent entries
 			query.find({
@@ -2229,6 +2230,8 @@
 		//setting default values in arrays
 
 		//for this function should I update the dates every week manually????
+
+		//make it so if all fields are blank then no need for update. Or should an employee only be allowed to update once????
 		var totalValue = 0;
 		for (j = 0; j < points2.length; j++) {
 			points2[j] = "abc";
@@ -2320,7 +2323,7 @@
 		var totalHrs2 = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
-		query.equalTo("username", UN);
+		query.equalTo("EmployeeName", EN);
 		query.descending("Date");
 		query.find({
 			success: function(results) {
