@@ -13,14 +13,17 @@
 <body>
 	<p id="manager1"></p>
 	<p id="manager2"></p>
-	<p id="test"></P>
+	<p id="test"></p>
+	<!--
 	<input type="text" id="Esearch" placeholder="Username"><br>
-	<input type="text" id="firstName" placeholder="First Name"><input type="text" id="lastName" placeholder="Last Name"><br>
-	<button onclick="searchFunction()">Search</button><br>
+-->
+	<input type="text" id="employeeName" placeholder="Employee Name"><br>
+	<button onclick="searchFunction()">Search</button>
 	<button onclick="logoutFunction()">Log Out</button>
 	<button>Approve Hours</button><br>
+	<p id="test2"></p>
 
-	<p>Select Work Week</p>
+	<p>Select work week</p>
 	<select id="values123">
 		<option value="07-03-2014 - 07-07-2014">07/03/2014 - 07/07/2014</option>
 		<option value="06-26-2014 - 07-02-2014">06/26/2014 - 07/02/2014</option>
@@ -34,7 +37,6 @@
 	<p>I'll change it in a bit to use the full name of the employee instead of the username</p>
 -->
 
-	<p id="test2"></p>
 	<p id="test3"></p>
 
 
@@ -48,15 +50,14 @@
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	var currentUser = Parse.User.current();
-	var UN = currentUser.get("username");
-	var FN = currentUser.get("firstName");
-	var LN = currentUser.get("lastName");
+	var EN = currentUser.get("employeeName");
 	var R = currentUser.get("roles");
 	var C = currentUser.get("company");
-	document.getElementById("test").innerHTML = "You are logged in as: " + UN;
+	document.getElementById("test").innerHTML = "You are logged in as: " + EN;
 
-	var EFN = document.getElementById("firstName").value;
-	var ELN = document.getElementById("lastName").value;
+	//var EFN = document.getElementById("firstName").value;
+	//var ELN = document.getElementById("lastName").value;
+	var EEN = document.getElementById("employeeName").value;
 
 	
 	function searchFunction() {
@@ -65,7 +66,7 @@
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
 
-		query.equalTo("username", document.getElementById("Esearch").value);
+		query.equalTo("EmployeeName", document.getElementById("employeeName").value);
 		query.descending("Date");
 		query.find({
 			success: function(results) {
@@ -112,7 +113,7 @@
 		var totalHrs2 = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
-		query.equalTo("username", document.getElementById("Esearch").value);
+		query.equalTo("EmployeeName", document.getElementById("employeeName").value);
 		query.descending("Date");
 		query.find({
 			success: function(results) {

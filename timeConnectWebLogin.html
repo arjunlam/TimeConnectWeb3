@@ -40,7 +40,7 @@
 				}
 			},
 			error: function(error) { 
-			  	alert("Error: Wrong Username or Password. Please refresh page and try again.");
+			  	alert("Error: Wrong Username or Password. Please refresh page and try again. " + "Error: " + error.code + " " + error.message);
 			} 
 		});
 	}
