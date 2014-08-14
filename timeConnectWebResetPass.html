@@ -8,6 +8,7 @@
 	<input type="text" id="email">Email</br>
 	<button onclick="resetFunction()">Reset</button><br>
 	<p id="succe"></p>
+	<p id="test2"></p>
 
 	<script>
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
@@ -18,7 +19,7 @@
 		Parse.User.requestPasswordReset(email, {
 			success: function() {
 				//window location method helps to redirect to a new window.
-				window.location="timeConnectWebResetHasBeenSent.html";
+				document.getElementById("test2").innerHTML = "Email to Reset your password has been sent!";
 			},
 			error: function(error) {
 				//error msg
