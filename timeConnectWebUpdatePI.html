@@ -14,7 +14,7 @@
 	<p id="test7"></p>
 
 
-	<p>Update your information below and fill all fields please</p>
+	<p>Update your information below and please fill all the fields</p>
 	<input type="text" id="firstN" placeholder="First Name"><br>
 	<input type="text" id="lastN" placeholder="Last Name"><br>
 	<input type="text" id="userN" placeholder="Username"><br>
@@ -28,20 +28,14 @@
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	var currentUser = Parse.User.current();
-	var fn = currentUser.get("firstName");
-	var ln = currentUser.get("lastName");
-	var un = currentUser.get("username");
-	var em = currentUser.get("email");
-	var pn = currentUser.get("company");
-	var cn = currentUser.get("phone");
 
 
-	document.getElementById("test1").innerHTML = "First Name: " + fn;
-	document.getElementById("test2").innerHTML = "Last Name: " + ln;
-	document.getElementById("test3").innerHTML = "Username: " + un;
-	document.getElementById("test5").innerHTML = "Email: " + em;
-	document.getElementById("test6").innerHTML = "Company Name: " + pn;
-	document.getElementById("test7").innerHTML = "Phone: " + cn;
+	document.getElementById("test1").innerHTML = "First Name: " + currentUser.get("firstName");
+	document.getElementById("test2").innerHTML = "Last Name: " + currentUser.get("lastName");
+	document.getElementById("test3").innerHTML = "Username: " + currentUser.get("username");
+	document.getElementById("test5").innerHTML = "Email: " + currentUser.get("email");
+	document.getElementById("test6").innerHTML = "Company Name: " + currentUser.get("company");
+	document.getElementById("test7").innerHTML = "Phone: " + currentUser.get("phone");
 
 
 	var FN = document.getElementById("firstN").value;
@@ -50,7 +44,8 @@
 	var EM = document.getElementById("email").value;
 	var PN = document.getElementById("phoneN").value;
 	var CN = document.getElementById("company").value;
-
+	var EN = FN + " " + LN;
+	var EN2 = EN.toLowerCase();
 
 	function updateFunction() {
 
@@ -60,6 +55,7 @@
 			firstName: FN + "",
 			lastName: LN + "",
 			username: UN + "",
+			employeeName: EN2 + "",
 			email: EM + "",
 			company: CN + "",
 			phone: PN + "",

@@ -5,15 +5,17 @@
 	<script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
 </head>
 <body>
-	
+	<form name="signUpForm" action="javascript:signUpFunction()">
 		<input type="text" id="firstN" placeholder="First Name"><br>
 		<input type="text" id="lastN" placeholder="Last Name"><br>
 		<input type="text" id="userN" placeholder="Username"><br>
-		<input type="passowrd" id="pass" placeholder="Password"><br>
+		<input type="password" id="pass" placeholder="Password"><br>
+		<input type="password" id="pass2" placeholder="Confirm Password"><br>
 		<input type="text" id="email" placeholder="Email"><br>
 		<input type="text" id="company" placeholder="Company Name"><br>
 		<input type="text" id="phoneN" placeholder="Phone Number (###-###-####"><br>
-		<button onclick="signUpFunction()">Sign Up</button>
+		<input type="submit" value="Submit">
+	</form>
 	
 
 	<script>
@@ -23,34 +25,42 @@
 	var LN = document.getElementById("lastN").value;
 	var UN = document.getElementById("userN").value;
 	var PW = document.getElementById("pass").value;
+	var PW2 = document.getElementById("pass2").value;
 	var EM = document.getElementById("email").value;
 	var PN = document.getElementById("phoneN").value;
 	var CN = document.getElementById("company").value;
+	var EN = FN + " " + LN;
+	var EN2 = EN.toLowerCase();
 
 	
 	function signUpFunction() {
 
-		var user = new Parse.User();
-		user.set("firstName", FN);
-		user.set("lastName", LN);
-		user.set("username", UN);
-		user.set("employeeName", FN + " " + LN);
-		user.set("password", PW);
-		user.set("email", EM);
-		user.set("phone", PN + "");
-		user.set("company", CN);
+		if (PW === PW2) {
 
-		user.signUp(null, {
-			success: function(user) {
-				//hooray! let them use the app now. just redirect to login page.
-				window.location="timeConnectWebLogin.html";
+			var user = new Parse.User();
+			user.set("firstName", FN);
+			user.set("lastName", LN);
+			user.set("username", UN);
+			user.set("employeeName", EN2);
+			user.set("password", PW);
+			user.set("email", EM);
+			user.set("phone", PN + "");
+			user.set("company", CN);
 
-			},
-			error: function(user, error) {
-				//show error message
-				alert("Error: " + error.code + " " + error.message);
-			}
-		});
+			user.signUp(null, {
+				success: function(user) {
+					//hooray! let them use the app now. just redirect to login page.
+					window.location="timeConnectWebLogin.html";
+
+				},
+				error: function(user, error) {
+					//show error message
+					alert("Error: " + error.code + " " + error.message);
+				}
+			});
+		} else {
+			alert("Error: Password does not match");
+		}
 
 	}
 	</script>

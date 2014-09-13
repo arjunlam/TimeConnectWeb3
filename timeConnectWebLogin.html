@@ -10,14 +10,15 @@
 <body>
 
 	<h1>TimeConnect</h1>
-	<input type="text" id="user" placeholder="Username"><br>
-	<input type="password" id="pass" placeholder="Password"><br>
-	<button onclick="loginFunction()">Login</button><br>
+	<!--need to add form/submit button-->
+	<form name="loginForm" action="javascript:loginFunction()">
+		<input type="text" id="user" placeholder="Username"><br>
+		<input type="password" id="pass" placeholder="Password"><br>
+		<button class="btn btn-success" type="submit">Login</button><br>
+	</form>
 	<a href="timeConnectWeSignUp.html">Sign Up</a>
 	<a href="timeConnectWebContact.html">Contact Us</a>
 	<a href="timeConnectWebResetPass.html">Reset Password</a><br>
-	
-	<p id="test"></p>
 	
 
 	<script>
@@ -39,8 +40,8 @@
 			  		window.location="timeConnectWebEmployeePage.html";
 				}
 			},
-			error: function(error) { 
-			  	alert("Error: Wrong Username or Password. Please refresh page and try again. " + "Error: " + error.code + " " + error.message);
+			error: function(user, error) { 
+			  	alert("Error: " + error.code + " " + error.message);
 			} 
 		});
 	}

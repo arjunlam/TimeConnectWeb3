@@ -8,15 +8,14 @@
 
 </head>
 <body>
-	<p id="manager1"></p>
-	<p id="manager2"></p>
 	<p id="test"></p>
-	<!--
-	<input type="text" id="Esearch" placeholder="Username"><br>
--->
-	<input type="text" id="employeeName" placeholder="Employee Name"><br>
-	<button onclick="searchFunction()">Search</button>
+	<form name="inputForm" action="javascript:searchFunction()">
+		<input type="text" id="employeeName" placeholder="Employee Name"><br>
+		<input type="submit" value="Submit">
+	</form>
+
 	<button onclick="logoutFunction()">Log Out</button>
+	<a href="timeConnectWebUpdatePI.html">Update Personal Info</a>
 	<button>Approve Hours</button><br>
 	<p id="test2"></p>
 
@@ -44,7 +43,6 @@
 	//search function now checks to see if employee company matches the managers company. 
 	//figure out how you will add roles to the database (probs manually or maybe a CSV file?)
 
-	//need to make it so caps does not matter!!!!!!!!!!!!!!!!!!!!!!! 
 	Parse.initialize("VHJSk9hmfDIoXsrRE3V7KWM6KHkncJwYfslUp10A", "qQzcr3LyCEAFf3yzxUmZh1LKy7EBmfxXw8vV6SMB");
 
 	var currentUser = Parse.User.current();
@@ -53,10 +51,8 @@
 	var C = currentUser.get("company");
 	document.getElementById("test").innerHTML = "You are logged in as: " + EN;
 
-	//var EFN = document.getElementById("firstName").value;
-	//var ELN = document.getElementById("lastName").value;
 	var EEN = document.getElementById("employeeName").value;
-
+	var EEN2 = EEN.toLowerCase();
 	
 	function searchFunction() {
 		//look at compound queries
@@ -64,7 +60,7 @@
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
 
-		query.equalTo("EmployeeName", document.getElementById("employeeName").value);
+		query.equalTo("EmployeeName", EEN2);
 		query.descending("Date");
 		query.find({
 			success: function(results) {
@@ -72,13 +68,15 @@
 				//var object1 = results[0];
 					if (C === results[0].get("company")) {
 						stringTest = stringTest + ('<table border="1" cellspacing="1" cellpadding="5">');
+
 						stringTest = stringTest + ('<tr><td>' + 'Employee Name: ' + '</td><td>' + results[0].get('FirstName') + '</td><td>' + results[0].get('LastName') + '</td><tr>');
-						stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+						stringTest = stringTest + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><tr>');
 
 						for (var i = 0; i < 7; i++) {
 							var object = results[i];
 							totalHrs = totalHrs + (object.get('timeOutMilitary') - object.get('timeInMilitary'));
-							stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td></tr>'); 
+
+							stringTest = stringTest + ('<tr><td>' + object.get('Date') + '</td><td>' + object.get('timeIn') + '</td><td>' + object.get('timeOut') + '</td><td>' + object.get('timeIn2') + '</td><td>' + object.get('timeOut2') + '</td><td>' + object.get('timeIn3') + '</td><td>' + object.get('timeOut3') + '</td><td>' + object.get('timeIn4') + '</td><td>' + object.get('timeOut4') + '</td></tr>'); 
 						}
 						stringTest = stringTest + ('<tr><td>' + "Total Hours:" + '</td><td>' + totalHrs/60.0 + '</td><td></td></tr>');
 						stringTest = stringTest + '</table>';
@@ -98,7 +96,7 @@
 
 	function logoutFunction() {
 		Parse.User.logOut();
-
+		location.reload();
 		window.location="timeConnectWebLogin.html";
 	}
 	
@@ -111,32 +109,34 @@
 		var totalHrs2 = 0;
 		var timeSheet = Parse.Object.extend("TimeSheet");
 		var query = new Parse.Query(timeSheet);
-		query.equalTo("EmployeeName", document.getElementById("employeeName").value);
+		query.equalTo("EmployeeName", EEN2);
 		query.descending("Date");
 		query.find({
 			success: function(results) {
 				testing = testing + ('<table border="1" cellspacing="1" cellpadding="5">');
-				testing = testing + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><tr>');
+				testing = testing + ('<tr><td>Date</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><td>Time In</td><td>Time Out</td><tr>');
 				for (i = 0; i < results.length; i++) {
 					var object = results[i];
 						
+					if (counter === 1) {
+						break;
+					}
+
 					if (b[2] === object.get('Date')) {
 						counter = 1;
 						for (j = i; j < results.length; j++) { 
 							var object2 = results[j];
 							if (b[0] !== object2.get('Date')) {
 								totalHrs2 = totalHrs2 + (object2.get('timeOutMilitary') - object2.get('timeInMilitary'));
-								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td></tr>'); 
+
+								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td><td>' + object2.get('timeIn2') + '</td><td>' + object2.get('timeOut2') + '</td><td>' + object2.get('timeIn3') + '</td><td>' + object2.get('timeOut3') + '</td><td>' + object2.get('timeIn4') + '</td><td>' + object2.get('timeOut4') + '</td></tr>'); 
 							} else {
 								totalHrs2 = totalHrs2 + (object2.get('timeOutMilitary') - object2.get('timeInMilitary'));
-								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td></tr>'); 
+
+								testing = testing + ('<tr><td>' + object2.get('Date') + '</td><td>' + object2.get('timeIn') + '</td><td>' + object2.get('timeOut') + '</td><td>' + object2.get('timeIn2') + '</td><td>' + object2.get('timeOut2') + '</td><td>' + object2.get('timeIn3') + '</td><td>' + object2.get('timeOut3') + '</td><td>' + object2.get('timeIn4') + '</td><td>' + object2.get('timeOut4') + '</td></tr>'); 
 								break;
 							}
 						}
-					}
-
-					if (counter === 1) {
-						break;
 					}
 				}
 
